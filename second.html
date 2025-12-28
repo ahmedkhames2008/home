@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fuel Tech</title>
+
+    <!-- Fonts & Icons -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+
+    <style>
+      :root {
+        --bg: #050b18;
+        --primary: #0b1f3a;
+        --card: #0f2442;
+        --blue: #1e90ff;
+        --text-muted: rgba(255, 255, 255, 0.75);
+      }
+
+      /* GENERAL */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+      body {
+        background: var(--bg);
+        color: #fff;
+        overflow-x: hidden;
+        scroll-behavior: smooth;
+      }
+      a {
+        text-decoration: none;
+      }
+
+      /* NAVBAR */
+      nav {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        background: rgba(5, 11, 24, 0.95);
+        backdrop-filter: blur(10px);
+        z-index: 100;
+      }
+      .nav-inner {
+        max-width: 1200px;
+        margin: auto;
+        padding: 15px 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .logo {
+        font-weight: 600;
+        font-size: 1.3rem;
+      }
+      .logo span {
+        color: var(--blue);
+      }
+      .nav-inner ul {
+        display: flex;
+        list-style: none;
+      }
+      .nav-inner ul li {
+        margin-left: 25px;
+      }
+      .nav-inner ul li a {
+        color: var(--text-muted);
+        font-weight: 500;
+        transition: 0.3s;
+      }
+      .nav-inner ul li a:hover {
+        color: #fff;
+      }
+      .nav-toggle {
+        display: none;
+        font-size: 1.5rem;
+        color: #fff;
+        cursor: pointer;
+      }
+
+      /* HERO */
+      .hero {
+        min-height: 100vh;
+        padding: 120px 10% 80px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        z-index: 1;
+      }
+      .hero-content {
+        max-width: 600px;
+      }
+      .hero h1 {
+        font-size: 3.6rem;
+        line-height: 1.05;
+      }
+      .hero h1 span {
+        color: var(--blue);
+        text-shadow: 0 0 25px rgba(30, 144, 255, 0.8);
+      }
+      .hero p {
+        margin: 25px 0 20px;
+        color: var(--text-muted);
+      }
+      .hero .btn-hero {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 36px;
+        font-weight: 600;
+        border-radius: 50px;
+        border: none;
+        background: linear-gradient(135deg, #1e90ff, #00cfff);
+        color: #fff;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .hero .btn-hero:hover {
+        transform: translateY(-3px) scale(1.05);
+        box-shadow: 0 12px 30px rgba(30, 144, 255, 0.8);
+      }
+      .hero .btn-hero i {
+        transition: transform 0.3s;
+      }
+      .hero .btn-hero:hover i {
+        transform: rotate(20deg) scale(1.2);
+      }
+
+      /* Typing Effect */
+      .hero-services {
+        font-size: 1.8rem;
+        margin: 10px 0;
+        display: flex;
+        align-items: center;
+        font-weight: 500;
+      }
+      #typed-text {
+        border-right: 2px solid var(--blue);
+        padding-right: 5px;
+        white-space: nowrap;
+        color: #00cfff;
+        overflow: hidden;
+        display: inline-block;
+      }
+
+      /* SPEEDOMETER */
+      .speedometer {
+        position: absolute;
+        right: 5%;
+        width: 320px;
+        height: 320px;
+        top: 120px;
+        z-index: 2;
+      }
+      .speedometer svg {
+        width: 100%;
+        height: 100%;
+        display: block;
+        transform: rotate(-220deg);
+      }
+      .ring-bg {
+        fill: none;
+        stroke: #0b1f3a;
+        stroke-width: 12;
+      }
+      .ring-active {
+        fill: none;
+        stroke: var(--blue);
+        stroke-width: 12;
+        stroke-dasharray: 565;
+        stroke-dashoffset: 120;
+        filter: drop-shadow(0 0 12px rgba(30, 144, 255, 0.8));
+      }
+      .numbers span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: rotate(calc(-120deg + var(--i) * 40deg)) translate(0, -140px)
+          rotate(calc(120deg - var(--i) * 40deg));
+        font-size: 0.85rem;
+        opacity: 0.85;
+      }
+      .needle {
+        position: absolute;
+        width: 4px;
+        height: 130px;
+        background: linear-gradient(#fff, var(--blue));
+        top: 50%;
+        left: 50%;
+        transform-origin: bottom;
+        transform: translate(-50%, -100%) rotate(-120deg);
+        animation: needleMove 3s infinite ease-in-out;
+      }
+      .center {
+        width: 16px;
+        height: 16px;
+        background: var(--blue);
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        box-shadow: 0 0 18px rgba(30, 144, 255, 0.9);
+      }
+      @keyframes needleMove {
+        0% {
+          transform: translate(-50%, -100%) rotate(-120deg);
+        }
+        50% {
+          transform: translate(-50%, -100%) rotate(110deg);
+        }
+        100% {
+          transform: translate(-50%, -100%) rotate(-120deg);
+        }
+      }
+
+      /* SERVICES SLIDER */
+      .services {
+        padding: 120px 10%;
+      }
+      .services h2 {
+        text-align: center;
+        font-size: 2.6rem;
+        margin-bottom: 70px;
+      }
+      .slider-container {
+        max-width: 700px;
+        margin: auto;
+        position: relative;
+        perspective: 1200px;
+      }
+      .slider {
+        position: relative;
+        min-height: 350px;
+      }
+      .slide {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(135deg, #0b1f3a, #050b18);
+        border-radius: 25px;
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+        padding: 40px 30px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color: #fff;
+        font-weight: 500;
+        transition: all 0.6s ease;
+        transform-origin: center center;
+      }
+      .slide i {
+        font-size: 4rem;
+        color: #1e90ff;
+        margin-bottom: 20px;
+        transition: transform 0.5s ease;
+      }
+      .slide h3 {
+        margin-bottom: 12px;
+        font-size: 1.3rem;
+      }
+      .slide p {
+        opacity: 0.75;
+        line-height: 1.5;
+        font-size: 0.95rem;
+      }
+      .slide .btn-service {
+        padding: 12px 28px;
+        border-radius: 20px;
+        border: none;
+        background: linear-gradient(135deg, #00cfff, #1e90ff);
+        color: #fff;
+        font-weight: 300;
+        margin: 15px;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+      .slide .btn-service:hover {
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 8px 25px rgba(30, 144, 255, 0.6);
+      }
+      .slide .btn-service i {
+        transition: transform 0.3s;
+        font-size: 1.5rem;
+
+
+      }
+      .slide .btn-service:hover i {
+        transform: rotate(15deg) scale(1.2);
+      }
+      .slide.active {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotateX(0deg);
+        z-index: 3;
+      }
+      .slide.prev {
+        opacity: 0.6;
+        transform: translateY(20px) scale(0.95) rotateX(10deg);
+        z-index: 2;
+      }
+      .slide.next {
+        opacity: 0.35;
+        transform: translateY(40px) scale(0.9) rotateX(-10deg);
+        z-index: 1;
+      }
+      .controls {
+        display: flex;
+        justify-content: center;
+        margin-top: 35px;
+      }
+      .controls button {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: transparent;
+        border: 1px solid rgba(30, 144, 255, 0.4);
+        color: #1e90ff;
+        margin: 0 10px;
+        cursor: pointer;
+        font-size: 1.2rem;
+        transition: 0.3s;
+      }
+      .controls button:hover {
+        background: #1e90ff;
+        color: #fff;
+      }
+
+      /* FAQS */
+      .faqs {
+        padding: 120px 10%;
+        background: var(--primary);
+      }
+      .faqs h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 50px;
+      }
+      .faq-item {
+        background: #0b1f3a;
+        margin-bottom: 15px;
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.4s;
+      }
+      .faq-question {
+        padding: 20px 25px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: 500;
+      }
+      .faq-answer {
+        max-height: 0;
+        overflow: hidden;
+        padding: 0 25px;
+        color: var(--text-muted);
+        transition: max-height 0.4s ease, padding 0.4s ease;
+      }
+      .faq-item.active .faq-answer {
+        max-height: 200px;
+        padding: 15px 25px;
+      }
+      .faq-item .bi {
+        transition: transform 0.4s;
+      }
+      .faq-item.active .bi {
+        transform: rotate(180deg);
+      }
+
+      /* PARTNERS */
+      .partners {
+        padding: 120px 10%;
+        overflow: hidden;
+        position: relative;
+      }
+      .partners h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        margin-bottom: 50px;
+      }
+      .partners-slider {
+        display: flex;
+        gap: 30px;
+        animation: scrollLeft 20s linear infinite;
+      }
+      .partner-logo {
+        min-width: 150px;
+        height: 80px;
+        background: #0b1f3a;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        color: #1e90ff;
+        font-weight: 700;
+        flex-shrink: 0;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+      .partner-logo:hover {
+        transform: scale(1.2);
+        box-shadow: 0 0 25px rgba(30, 144, 255, 0.8);
+      }
+      @keyframes scrollLeft {
+        0% {
+          transform: translateX(0);
+        }
+        100% {
+          transform: translateX(-50%);
+        }
+      }
+
+      /* FOOTER */
+      footer {
+        background: var(--primary);
+        padding: 50px 10%;
+        margin-top: 50px;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+      footer h3 {
+        margin-bottom: 15px;
+      }
+      footer p,
+      footer a {
+        color: var(--text-muted);
+        text-decoration: none;
+        margin-bottom: 8px;
+        display: block;
+      }
+      footer a:hover {
+        color: #fff;
+      }
+      footer .footer-col {
+        min-width: 200px;
+        margin-bottom: 20px;
+      }
+      footer .btn-footer {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 30px;
+        border-radius: 50px;
+        background: linear-gradient(135deg, #1e90ff, #00cfff);
+        color: #fff;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s;
+        margin-top: 10px;
+      }
+      footer .btn-footer:hover {
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 10px 28px rgba(30, 144, 255, 0.7);
+      }
+      footer .btn-footer i {
+        transition: transform 0.3s;
+      }
+      footer .btn-footer:hover i {
+        transform: rotate(15deg) scale(1.2);
+      }
+
+      /* RESPONSIVE */
+      @media (max-width: 900px) {
+        .hero {
+          flex-direction: column;
+          text-align: center;
+        }
+        .speedometer {
+          display: none;
+        }
+        .slider-container {
+          max-width: 95%;
+        }
+        .slide i {
+          font-size: 2.5rem;
+        }
+        .nav-inner ul {
+          display: none;
+          flex-direction: column;
+          background: var(--primary);
+          position: absolute;
+          top: 60px;
+          right: 0;
+          width: 200px;
+          border-radius: 10px;
+          overflow: hidden;
+        }
+        .nav-inner ul.show {
+          display: flex;
+        }
+        .nav-toggle {
+          display: block;
+        }
+        .partner-logo {
+          min-width: 120px;
+          height: 60px;
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav>
+      <div class="nav-inner">
+        <div class="logo"><a href="#"><img src="./assets/logo_light.svg" alt=""></a></div>
+        <i class="bi bi-list nav-toggle"></i>
+        <ul>
+          <li><a href="#">Home</a></li>
+          <li><a href="#services">Services</a></li>
+          <li><a href="#faqs">FAQs</a></li>
+          <li><a href="#partners">Partners</a></li>
+          <li>
+            <a href="#" class="btn-footer"
+              ><i class="bi bi-cart4"></i> Order Now</a
+            >
+          </li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Fuel<span> Tech</span> <p>Travel Safely</p></h1>
+        <p>
+          
+        </p>
+        <h2 class="hero-services"><span id="typed-text"></span></h2>
+        <button class="btn-hero"><i class="bi bi-cart4"></i> Order Now</button>
+      </div>
+
+      <div class="speedometer">
+        <svg viewBox="0 0 300 300">
+          <circle cx="150" cy="150" r="120" class="ring-bg" />
+          <circle cx="150" cy="150" r="120" class="ring-active" />
+        </svg>
+        <div class="numbers">
+          <span style="--i: 0">0</span>
+          <span style="--i: 1">40</span>
+          <span style="--i: 2">80</span>
+          <span style="--i: 3">120</span>
+          <span style="--i: 4">160</span>
+          <span style="--i: 5">200</span>
+          <span style="--i: 6">240</span>
+        </div>
+        <div class="needle"></div>
+        <div class="center"></div>
+      </div>
+    </section>
+
+    <!-- SERVICES SLIDER -->
+    <section class="services" id="services">
+      <h2>Our Core Services</h2>
+      <div class="slider-container">
+        <div class="slider">
+          <div class="slide active">
+            <i class="bi bi-speedometer2"></i>
+            <h3>Tired tyres? We’ll upgrade your tread today.</h3>
+            <p>Changing car's tires with in 15 (M).</p>
+            <button class="btn-service">
+              <i class="bi bi-cart4"></i> Order Now
+            </button>
+          </div>
+          <div class="slide">
+            <i class="bi bi-shield-lock"></i>
+            <h3>24/7 Fuel service, at petrol station rates.</h3>
+            <p>Enjoy our contactless fuel delivery straight to your car. </p>
+            <button class="btn-service">
+              <i class="bi bi-cart4"></i> Order Now
+            </button>
+          </div>
+          <div class="slide">
+            <i class="bi bi-cpu"></i>
+            <h3>Smart Technology</h3>
+            <p>AI-driven scalable digital solutions.</p>
+            <button class="btn-service">
+              <i class="bi bi-cart4"></i> Order Now
+            </button>
+          </div>
+          <div class="slide">
+            <i class="bi bi-cloud"></i>
+            <h3>Rise and shine. Your car deserves a spa day too.</h3>
+            <p>Give your ride the glow it’s worthy of.</p>
+            <button class="btn-service">
+              <i class="bi bi-cart4"></i> Order Now
+            </button>
+          </div>
+          <div class="slide">
+            <i class="bi bi-bar-chart-line"></i>
+            <h3>Engine oil with free 10-point check</h3>
+            <p>Mobile oil change, free 10-point check.</p>
+            <button class="btn-service">
+              <i class="bi bi-cart4"></i> Order Now
+            </button>
+          </div>
+          <div class="slide">
+            <i class="bi bi-diagram-3"></i>
+            <h3>Stuck at the roadside? No sweat.</h3>
+            <p>Just Fuel tech it and we’ll be to you in minutes.</p>
+            <button class="btn-service">
+              <i class="bi bi-cart4"></i> Order Now
+            </button>
+          </div>
+        </div>
+        <div class="controls">
+          <button id="prev"><i class="bi bi-chevron-left"></i></button>
+          <button id="next"><i class="bi bi-chevron-right"></i></button>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQS -->
+    <section class="faqs" id="faqs">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-item">
+        <div class="faq-question">
+          What is Fuel Tech? <i class="bi bi-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          Fuel Tech is a high-performance technology platform designed for speed
+          and reliability.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          How secure is your system? <i class="bi bi-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          Our system uses enterprise-grade security protocols to ensure data
+          safety.
+        </div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-question">
+          Can I integrate with cloud services?
+          <i class="bi bi-chevron-down"></i>
+        </div>
+        <div class="faq-answer">
+          Yes, our platform is fully compatible with major cloud
+          infrastructures.
+        </div>
+      </div>
+    </section>
+
+    <!-- PARTNERS -->
+    <section class="partners" id="partners">
+      <h2>Our Partners</h2>
+      <div class="partners-slider">
+        <div class="partner-logo">A</div>
+        <div class="partner-logo">B</div>
+        <div class="partner-logo">C</div>
+        <div class="partner-logo">D</div>
+        <div class="partner-logo">E</div>
+        <div class="partner-logo">F</div>
+        <div class="partner-logo">G</div>
+        <div class="partner-logo">H</div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer>
+      <div class="footer-col">
+        <h3>Fuel Tech</h3>
+        <p>Leading technology for speed and innovation.</p>
+        <a href="#" class="btn-footer"><i class="bi bi-cart4"></i> Order Now</a>
+      </div>
+      <div class="footer-col">
+        <h3>Links</h3>
+        <a href="#">Home</a>
+        <a href="#services">Services</a>
+        <a href="#faqs">FAQs</a>
+        <a href="#partners">Partners</a>
+      </div>
+      <div class="footer-col">
+        <h3>Contact</h3>
+        <p>Email: info@fueltech.com</p>
+        <p>Phone: +1 234 567 890</p>
+      </div>
+    </footer>
+
+    <script>
+      // Navbar toggle
+      const navToggle = document.querySelector(".nav-toggle");
+      const navMenu = document.querySelector("nav ul");
+      navToggle.addEventListener("click", () => {
+        navMenu.classList.toggle("show");
+      });
+
+      // Typing effect
+      const texts = [
+        "Engine Oil Change",
+        "Gas | Petrol | CNG",
+        "Car Wash",
+        "Battery Change",
+        "Rescue",
+        "Tires Change",
+      ];
+      let count = 0;
+      let indexT = 0;
+      (function type() {
+        if (count === texts.length) count = 0;
+        const current = texts[count];
+        const letter = current.slice(0, ++indexT);
+        document.getElementById("typed-text").textContent = letter;
+        if (letter.length === current.length) {
+          setTimeout(() => {
+            indexT = 0;
+            count++;
+            setTimeout(type, 500);
+          }, 1500);
+        } else setTimeout(type, 150);
+      })();
+
+      // Slider
+      const slides = document.querySelectorAll(".slide");
+      let indexS = 0;
+      function updateSlides() {
+        slides.forEach((s, i) => {
+          s.classList.remove("active", "prev", "next");
+          if (i === indexS) s.classList.add("active");
+          else if (i === (indexS - 1 + slides.length) % slides.length)
+            s.classList.add("prev");
+          else if (i === (indexS + 1) % slides.length) s.classList.add("next");
+        });
+      }
+      document.getElementById("next").onclick = () => {
+        indexS = (indexS + 1) % slides.length;
+        updateSlides();
+      };
+      document.getElementById("prev").onclick = () => {
+        indexS = (indexS - 1 + slides.length) % slides.length;
+        updateSlides();
+      };
+      setInterval(() => {
+        indexS = (indexS + 1) % slides.length;
+        updateSlides();
+      }, 5000);
+      updateSlides();
+
+      // FAQ Accordion
+      document.querySelectorAll(".faq-item").forEach((item) => {
+        item.querySelector(".faq-question").onclick = () => {
+          item.classList.toggle("active");
+        };
+      });
+
+      // Partners slider pause on hover
+      const slider = document.querySelector(".partners-slider");
+      slider.addEventListener("mouseenter", () => {
+        slider.style.animationPlayState = "paused";
+      });
+      slider.addEventListener("mouseleave", () => {
+        slider.style.animationPlayState = "running";
+      });
+    </script>
+  </body>
+</html>
