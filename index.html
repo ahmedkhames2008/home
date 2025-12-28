@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fuel Tech</title>
+
+<!-- Poppins -->
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- Bootstrap Icons -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+:root{
+  --bg:#050b18;
+  --blue:#1e90ff;
+  --blue-soft:rgba(30,144,255,.15);
+  --text-muted:rgba(255,255,255,.75);
+}
+
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:'Poppins',sans-serif;
+}
+
+body{
+  background:radial-gradient(circle at top,#0b1f3a,#050b18);
+  color:#fff;
+  overflow-x:hidden;
+}
+
+/* ================= BACKGROUND ENERGY ================= */
+
+.energy{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+}
+
+.energy::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:
+    repeating-linear-gradient(
+      120deg,
+      transparent,
+      transparent 100px,
+      rgba(255,255,255,.03) 102px
+    );
+}
+
+.orb{
+  position:absolute;
+  width:420px;
+  height:420px;
+  background:radial-gradient(circle,var(--blue),transparent 65%);
+  filter:blur(80px);
+  animation:float 8s infinite ease-in-out;
+}
+
+.orb.one{top:10%;left:5%}
+.orb.two{bottom:10%;right:10%;animation-delay:3s}
+
+@keyframes float{
+  50%{transform:translateY(-80px)}
+}
+
+/* ================= NAV ================= */
+
+nav{
+  position:fixed;
+  top:0;
+  width:100%;
+  z-index:10;
+  background:rgba(5,11,24,.7);
+  backdrop-filter:blur(10px);
+}
+
+.nav-inner{
+  max-width:1200px;
+  margin:auto;
+  padding:20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.logo{
+  font-weight:600;
+  letter-spacing:1px;
+}
+
+.logo span{color:var(--blue)}
+
+.nav-links a{
+  margin-left:25px;
+  color:var(--text-muted);
+  text-decoration:none;
+  font-size:.95rem;
+}
+
+.nav-links a:hover{color:#fff}
+
+/* ================= HERO ================= */
+
+.hero{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  padding:0 10%;
+  position:relative;
+}
+
+.hero-content{
+  max-width:620px;
+  z-index:2;
+}
+
+.hero h1{
+  font-size:3.8rem;
+  line-height:1.05;
+}
+
+.hero h1 span{
+  color:var(--blue);
+  text-shadow:0 0 30px rgba(30,144,255,.9);
+}
+
+.hero p{
+  margin:25px 0 45px;
+  color:var(--text-muted);
+}
+
+.hero a{
+  display:inline-block;
+  padding:15px 36px;
+  border-radius:40px;
+  text-decoration:none;
+  margin-right:15px;
+  font-weight:500;
+}
+
+.primary{
+  background:var(--blue);
+  color:#fff;
+  box-shadow:0 0 30px rgba(30,144,255,.8);
+}
+
+.outline{
+  border:1px solid var(--blue);
+  color:var(--blue);
+}
+
+/* ================= SPEEDOMETER ================= */
+
+.speedometer{
+  position:absolute;
+  right:8%;
+  width:360px;
+  height:360px;
+  border-radius:50%;
+}
+
+svg{
+  position:absolute;
+  inset:0;
+  transform:rotate(-220deg);
+}
+
+.ring-bg{
+  fill:none;
+  stroke:#0b1f3a;
+  stroke-width:14;
+}
+
+.ring-active{
+  fill:none;
+  stroke:#1e90ff;
+  stroke-width:14;
+  stroke-dasharray:565;
+  stroke-dashoffset:110;
+  filter:drop-shadow(0 0 14px rgba(30,144,255,.8));
+}
+
+/* numbers */
+.numbers{
+  position:absolute;
+  inset:0;
+}
+
+.numbers span{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:
+    rotate(calc(-120deg + var(--i) * 40deg))
+    translate(0,-165px)
+    rotate(calc(120deg - var(--i) * 40deg));
+  font-size:.85rem;
+  color:rgba(255,255,255,.85);
+}
+
+/* needle */
+.needle{
+  position:absolute;
+  width:4px;
+  height:150px;
+  background:linear-gradient(#fff,var(--blue));
+  left:50%;
+  top:50%;
+  transform-origin:bottom;
+  transform:translate(-50%,-100%) rotate(-120deg);
+  animation:needleMove 3s infinite ease-in-out;
+  box-shadow:0 0 18px rgba(30,144,255,.9);
+}
+
+.center{
+  position:absolute;
+  width:16px;
+  height:16px;
+  background:var(--blue);
+  border-radius:50%;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  box-shadow:0 0 20px rgba(30,144,255,.9);
+}
+
+.speed-value{
+  position:absolute;
+  bottom:90px;
+  width:100%;
+  text-align:center;
+}
+
+.speed-value span{
+  font-size:2.2rem;
+  font-weight:600;
+}
+
+.speed-value small{
+  font-size:.8rem;
+  opacity:.7;
+}
+
+@keyframes needleMove{
+  0%{transform:translate(-50%,-100%) rotate(-120deg)}
+  60%{transform:translate(-50%,-100%) rotate(110deg)}
+  100%{transform:translate(-50%,-100%) rotate(-120deg)}
+}
+
+/* ================= SERVICES ================= */
+
+.services{
+  padding:120px 10%;
+}
+
+.services h2{
+  text-align:center;
+  font-size:2.8rem;
+  margin-bottom:80px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:40px;
+}
+
+.card{
+  background:linear-gradient(160deg,#0f2442,#0b1f3a);
+  padding:50px 35px;
+  border-radius:24px;
+  position:relative;
+  overflow:hidden;
+  transition:.4s;
+}
+
+.card::before{
+  content:'';
+  position:absolute;
+  inset:0;
+  background:linear-gradient(120deg,transparent,rgba(30,144,255,.25),transparent);
+  transform:translateX(-100%);
+  transition:.6s;
+}
+
+.card:hover::before{transform:translateX(100%)}
+.card:hover{transform:translateY(-16px)}
+
+.card i{
+  font-size:3rem;
+  color:var(--blue);
+  margin-bottom:20px;
+}
+
+.card p{opacity:.75}
+
+/* ================= RESPONSIVE ================= */
+
+@media(max-width:900px){
+  .speedometer{display:none}
+  .hero{text-align:center;justify-content:center}
+  .nav-links{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- BACKGROUND -->
+<div class="energy">
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-inner">
+    <div class="logo">Fuel<span>Tech</span></div>
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="#services">Services</a>
+      <a href="#">Contact</a>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <h1>Fuel Your <span>Speed</span><br>Power the Future</h1>
+    <p>High-performance technology engineered for speed,
+    precision and scalability.</p>
+
+    <a href="#" class="primary">Get Started</a>
+    <a href="#services" class="outline">Our Services</a>
+  </div>
+
+  <!-- SPEEDOMETER -->
+  <div class="speedometer">
+    <svg viewBox="0 0 300 300">
+      <circle cx="150" cy="150" r="120" class="ring-bg"/>
+      <circle cx="150" cy="150" r="120" class="ring-active"/>
+    </svg>
+
+    <div class="numbers">
+      <span style="--i:0">0</span>
+      <span style="--i:1">40</span>
+      <span style="--i:2">80</span>
+      <span style="--i:3">120</span>
+      <span style="--i:4">160</span>
+      <span style="--i:5">200</span>
+      <span style="--i:6">240</span>
+    </div>
+
+    <div class="needle"></div>
+    <div class="center"></div>
+
+    <div class="speed-value">
+      <span>240</span>
+      <small>km/h</small>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <h2>Performance Services</h2>
+
+  <div class="grid">
+    <div class="card">
+      <i class="bi bi-speedometer2"></i>
+      <h3>Extreme Speed</h3>
+      <p>Ultra-fast systems built for maximum performance.</p>
+    </div>
+
+    <div class="card">
+      <i class="bi bi-shield-check"></i>
+      <h3>Secure Core</h3>
+      <p>Enterprise-grade security and protection.</p>
+    </div>
+
+    <div class="card">
+      <i class="bi bi-cpu"></i>
+      <h3>Smart Engine</h3>
+      <p>AI-driven scalable digital solutions.</p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
